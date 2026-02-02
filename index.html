@@ -1,0 +1,691 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Special Someone 💖</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', 'Arial Rounded MT Bold', 'Arial', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #ffd6e7, #ffafbd, #c9eff9);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            position: relative;
+            padding: 20px;
+        }
+        
+        /* Envelope Section */
+        .envelope-section {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffafbd, #ffc3a0);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        
+        .envelope-section.hidden {
+            opacity: 0;
+            pointer-events: none;
+            transform: translateY(-100%);
+        }
+        
+        .instructions {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 40px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        .envelope {
+            position: relative;
+            width: 320px;
+            height: 220px;
+            cursor: pointer;
+            transition: transform 0.5s;
+        }
+        
+        .envelope:hover {
+            transform: scale(1.05);
+        }
+        
+        .envelope-front {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ff3366;
+            clip-path: polygon(0% 0%, 100% 0%, 100% 85%, 50% 100%, 0% 85%);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            z-index: 2;
+        }
+        
+        .envelope-flap {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ff6699;
+            clip-path: polygon(50% 0%, 0% 85%, 100% 85%);
+            transform-origin: top;
+            transition: transform 0.8s ease-in-out;
+            z-index: 3;
+        }
+        
+        .envelope.open .envelope-flap {
+            transform: rotateX(180deg);
+        }
+        
+        .envelope-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: #ff99bb;
+            clip-path: polygon(0% 15%, 50% 0%, 100% 15%, 100% 100%, 0% 100%);
+            z-index: 1;
+        }
+        
+        .heart-seal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 4rem;
+            color: white;
+            z-index: 4;
+            animation: heartbeat 1.5s infinite;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        @keyframes heartbeat {
+            0%, 100% { transform: translate(-50%, -50%) scale(1); }
+            25% { transform: translate(-50%, -50%) scale(1.1); }
+            50% { transform: translate(-50%, -50%) scale(1.2); }
+            75% { transform: translate(-50%, -50%) scale(1.1); }
+        }
+        
+        /* Main Content */
+        .main-content {
+            display: none;
+            text-align: center;
+            max-width: 900px;
+            width: 95%;
+            opacity: 0;
+            transform: translateY(30px);
+            transition: opacity 1s ease, transform 1s ease;
+        }
+        
+        .main-content.show {
+            display: flex;
+            flex-direction: column;
+            opacity: 1;
+            transform: translateY(0);
+            min-height: 85vh; 
+            justify-content: space-between;
+        }
+        
+        .header {
+            margin-bottom: 10px; /* Reduced margin */
+        }
+        
+        h1 {
+            color: #ff3366;
+            font-size: 3.2rem;
+            margin-bottom: 10px;
+            text-shadow: 3px 3px 0 #ffd6e7;
+            background: linear-gradient(45deg, #ff3366, #ff6699);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        
+        .subtitle {
+            color: #ff6699;
+            font-size: 1.8rem;
+            font-weight: 600;
+        }
+        
+        /* Content Area */
+        .content-area {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 10px 0; /* Reduced from 20px */
+        }
+        
+        .image-section {
+            margin: 10px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+        }
+        
+        .image-placeholder {
+            width: 250px; /* Slightly smaller image to fit screen */
+            height: 250px;
+            background: linear-gradient(45deg, #ffd6e7, #ffafbd);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            border: 5px dashed #ff6699;
+            margin-bottom: 10px;
+            overflow: hidden; 
+        }
+        
+        .custom-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: block; 
+        }
+        
+        /* MESSAGE BOX - REDUCED SIZE */
+        .message {
+            font-size: 2rem;
+            color: #ff3366;
+            margin: 10px 0; /* Reduced margin */
+            min-height: 40px; /* Reduced height to save space */
+            opacity: 0;
+            transition: opacity 0.8s;
+            font-weight: bold;
+            padding: 15px;
+            border-radius: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 90%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .message.show {
+            opacity: 1;
+            min-height: 80px; /* Expands when there is actually a message */
+        }
+        
+        /* Buttons Section - MOVED UPWARDS */
+        .buttons-section {
+            margin: -20px 0 30px 0; /* Negative top margin pulls buttons UP */
+            position: relative;
+            min-height: 100px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            width: 100%;
+        }
+        
+        .buttons-row {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-bottom: 20px;
+        }
+        
+        .valentine-btn {
+            padding: 22px 65px;
+            font-size: 2.2rem;
+            border: none;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            z-index: 10;
+            position: relative;
+            min-width: 220px;
+        }
+        
+        #yes-btn {
+            background: linear-gradient(45deg, #4CAF50, #8BC34A);
+            color: white;
+            border: 5px solid #a5d6a7;
+            animation: pulse-glow 2s infinite;
+        }
+        
+        @keyframes pulse-glow {
+            0%, 100% { box-shadow: 0 10px 25px rgba(76, 175, 80, 0.3); }
+            50% { box-shadow: 0 10px 30px rgba(76, 175, 80, 0.6); }
+        }
+        
+        #no-btn {
+            background: linear-gradient(45deg, #ff4444, #ff8800);
+            color: white;
+            border: 5px solid #ffccbc;
+            transition: all 0.1s;
+        }
+        
+        #yes-btn:hover {
+            background: linear-gradient(45deg, #45a049, #7cb342);
+            transform: scale(1.1);
+        }
+        
+        /* Floating Elements */
+        .floating-hearts {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            top: 0;
+            left: 0;
+            pointer-events: none;
+            z-index: 1;
+        }
+        
+        .floating-heart {
+            position: absolute;
+            font-size: 30px;
+            animation: floatUp 8s linear infinite;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.2));
+        }
+        
+        @keyframes floatUp {
+            0% {
+                transform: translateY(100vh) rotate(0deg) scale(0.5);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg) scale(1);
+                opacity: 0;
+            }
+        }
+        
+        .romantic-element {
+            position: fixed;
+            font-size: 2.5rem;
+            color: rgba(255, 107, 157, 0.6);
+            z-index: 1;
+            filter: drop-shadow(2px 2px 3px rgba(0,0,0,0.1));
+        }
+        
+        .element-1 { top: 10%; left: 5%; animation: spin 20s linear infinite; }
+        .element-2 { top: 15%; right: 10%; animation: spin 25s linear infinite reverse; }
+        .element-3 { bottom: 20%; left: 10%; animation: spin 30s linear infinite; }
+        .element-4 { bottom: 10%; right: 5%; animation: spin 35s linear infinite reverse; }
+        
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        
+        .footer {
+            margin-top: 15px;
+            color: #ff6699;
+            font-size: 1.4rem;
+            font-weight: bold;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 { font-size: 2.5rem; }
+            .subtitle { font-size: 1.5rem; }
+            .valentine-btn { 
+                padding: 18px 45px; 
+                font-size: 1.9rem;
+                min-width: 180px;
+            }
+            .buttons-row {
+                gap: 20px;
+                flex-direction: column;
+                align-items: center;
+            }
+            .image-placeholder { width: 220px; height: 220px; }
+            .message { font-size: 1.8rem; padding: 15px; }
+            .envelope { width: 280px; height: 190px; }
+            .main-content.show { min-height: 90vh; }
+        }
+        
+        @media (max-height: 700px) {
+            .buttons-section {
+                margin: -30px 0 25px 0; /* Even more upward pull for small screens */
+            }
+            .image-placeholder {
+                width: 200px;
+                height: 200px;
+            }
+            h1 { font-size: 2.2rem; }
+            .message { min-height: 30px; margin: 5px 0; }
+        }
+    </style>
+</head>
+<body>
+    <section class="envelope-section" id="envelopeSection">
+        <p class="instructions">Tap the envelope to open your special message 💌</p>
+        <div class="envelope" id="envelope">
+            <div class="envelope-front"></div>
+            <div class="envelope-flap"></div>
+            <div class="envelope-back"></div>
+            <div class="heart-seal">❤️</div>
+        </div>
+    </section>
+    
+    <div class="main-content" id="mainContent">
+        <div class="header">
+            <h1>Hey, Cutie Patootie 💕</h1>
+            <h1>Will You Be My Valentine? 💕</h1>
+            <p class="subtitle">This special day is just for you...</p>
+        </div>
+        
+        <div class="content-area">
+            <div class="image-section">
+                <div class="image-placeholder">
+                    <img src="valentine-cutout.jpg" alt="Cute Couple" class="custom-image">
+                </div>
+            </div>
+            
+            <div class="message" id="message">
+                </div>
+        </div>
+        
+        <div class="buttons-section" id="buttonsSection">
+            <div class="buttons-row">
+                <button id="yes-btn" class="valentine-btn">
+                    <i class="fas fa-heart"></i> YES! 
+                </button>
+                <button id="no-btn" class="valentine-btn">
+                    <i class="fas fa-times-circle"></i> NO
+                </button>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>You make every day brighter ☀️</p>
+        </div>
+    </div>
+    
+    <div class="floating-hearts" id="floatingHearts"></div>
+    <div class="romantic-element element-1">
+        <i class="fas fa-heart"></i>
+    </div>
+    <div class="romantic-element element-2">
+        <i class="fas fa-kiss-wink-heart"></i>
+    </div>
+    <div class="romantic-element element-3">
+        <i class="fas fa-gift"></i>
+    </div>
+    <div class="romantic-element element-4">
+        <i class="fas fa-heartbeat"></i>
+    </div>
+
+    <script>
+        // Envelope Opening Logic
+        const envelopeSection = document.getElementById('envelopeSection');
+        const envelope = document.getElementById('envelope');
+        const mainContent = document.getElementById('mainContent');
+        const floatingHearts = document.getElementById('floatingHearts');
+        
+        // Create initial floating hearts for envelope section
+        createHearts(20);
+        
+        // Open envelope when clicked
+        envelope.addEventListener('click', openEnvelope);
+        envelope.addEventListener('touchstart', openEnvelope);
+        
+        function openEnvelope() {
+            // Add open class to envelope for animation
+            envelope.classList.add('open');
+            
+            // Wait for envelope animation, then reveal main content
+            setTimeout(() => {
+                envelopeSection.classList.add('hidden');
+                
+                // Show main content with animation
+                setTimeout(() => {
+                    mainContent.classList.add('show');
+                    
+                    // Create more hearts for main content
+                    createHearts(30);
+                }, 500);
+            }, 1000);
+        }
+        
+        // Create floating hearts
+        function createHearts(count) {
+            const heartColors = ['#ff3366', '#ff6699', '#ff9966', '#ffcc00', '#ff66aa'];
+            
+            for (let i = 0; i < count; i++) {
+                const heart = document.createElement('div');
+                heart.classList.add('floating-heart');
+                heart.innerHTML = '❤️';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.animationDelay = Math.random() * 8 + 's';
+                heart.style.fontSize = (Math.random() * 30 + 20) + 'px';
+                heart.style.color = heartColors[Math.floor(Math.random() * heartColors.length)];
+                heart.style.opacity = 0.8 + Math.random() * 0.2;
+                floatingHearts.appendChild(heart);
+            }
+        }
+        
+        // Valentine Button Logic
+        const yesBtn = document.getElementById('yes-btn');
+        const noBtn = document.getElementById('no-btn');
+        const message = document.getElementById('message');
+        
+        // Track "No" button attempts and position
+        let noButtonAttempts = 0;
+        const messages = [
+            "Are you sure? 😢",
+            "But I made this just for you!",
+            "Think about it again! 🥺",
+            "My heart will be broken!",
+            "Pretty please? 💖",
+            "You're making me sad!",
+            "Don't say no! 😭",
+            "I'll be really really sad!",
+            "Last chance to change your mind!",
+            "Okay, I'll stop asking... but I won't stop liking you! 💘"
+        ];
+        
+        // Handle "Yes" button click
+        yesBtn.addEventListener('click', function() {
+            message.innerHTML = "Thank You! My Cutie Patootie 🎉💖<br>Get ready for the most amazing Valentine's Day ever!";
+            message.classList.add('show');
+            
+            // Celebration animation
+            for (let i = 0; i < 100; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('floating-heart');
+                    heart.innerHTML = '💖';
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.animationDelay = '0s';
+                    heart.style.animationDuration = '4s';
+                    heart.style.fontSize = (Math.random() * 40 + 25) + 'px';
+                    heart.style.color = ['#ff3366', '#ff6699', '#ff9966'][Math.floor(Math.random() * 3)];
+                    floatingHearts.appendChild(heart);
+                    
+                    setTimeout(() => {
+                        if (heart.parentNode) heart.remove();
+                    }, 4000);
+                }, i * 50);
+            }
+            
+            // Update buttons
+            yesBtn.disabled = true;
+            noBtn.disabled = true;
+            yesBtn.innerHTML = '<i class="fas fa-heart"></i> YOU SAID YES! <i class="fas fa-heart"></i>';
+            yesBtn.style.animation = 'pulse-glow 0.8s infinite';
+            
+            // Remove "No" button
+            noBtn.style.display = 'none';
+        });
+        
+        // Handle "No" button - moves randomly across entire screen
+        noBtn.addEventListener('mouseover', moveNoButtonRandomly);
+        noBtn.addEventListener('touchstart', function(e) {
+            e.preventDefault();
+            moveNoButtonRandomly();
+        });
+        
+        noBtn.addEventListener('click', function(e) {
+            e.preventDefault();
+            moveNoButtonRandomly();
+            
+            // Change message based on attempts
+            if (noButtonAttempts < messages.length) {
+                message.innerHTML = messages[noButtonAttempts];
+                message.classList.add('show');
+                
+                // Hide message after 2 seconds
+                setTimeout(() => {
+                    message.classList.remove('show');
+                }, 2000);
+            }
+            
+            noButtonAttempts++;
+            
+            // Make button smaller with each attempt
+            const scale = Math.max(0.5, 1 - (noButtonAttempts * 0.05));
+            noBtn.style.transform = `scale(${scale})`;
+            
+            // After many attempts, change button
+            if (noButtonAttempts >= messages.length) {
+                noBtn.innerHTML = "OKAY, I GIVE UP!";
+                noBtn.style.background = "linear-gradient(45deg, #888, #aaa)";
+                noBtn.disabled = true;
+                noBtn.style.opacity = '0.7';
+                message.innerHTML = "You win this time... but my feelings won't change! 💕";
+                message.classList.add('show');
+            }
+        });
+        
+        // Move "No" button randomly across entire screen
+        function moveNoButtonRandomly() {
+            // Get viewport dimensions
+            const vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
+            const vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
+            
+            // Get button dimensions
+            const btnWidth = noBtn.offsetWidth;
+            const btnHeight = noBtn.offsetHeight;
+            
+            // Calculate random position within viewport
+            const maxX = vw - btnWidth - 20;
+            const maxY = vh - btnHeight - 20;
+            
+            // Ensure button stays within bounds
+            const randomX = Math.max(10, Math.random() * maxX);
+            const randomY = Math.max(10, Math.random() * maxY);
+            
+            // Apply new position - using fixed positioning to move across entire screen
+            noBtn.style.position = 'fixed';
+            noBtn.style.left = randomX + 'px';
+            noBtn.style.top = randomY + 'px';
+            noBtn.style.transform = `translate(0, 0) scale(${Math.max(0.5, 1 - (noButtonAttempts * 0.05))})`;
+            
+            // Change color temporarily
+            const colors = [
+                'linear-gradient(45deg, #ff4444, #ff8800)',
+                'linear-gradient(45deg, #ff8800, #ff4444)',
+                'linear-gradient(45deg, #ff3366, #ff4444)',
+                'linear-gradient(45deg, #ff4444, #ff3366)'
+            ];
+            noBtn.style.background = colors[Math.floor(Math.random() * colors.length)];
+            
+            // Add bounce effect
+            noBtn.style.transition = 'all 0.2s ease-out';
+            
+            // Create a visual trail effect
+            createButtonTrail(randomX + btnWidth/2, randomY + btnHeight/2);
+        }
+        
+        // Create a trail effect when button moves
+        function createButtonTrail(x, y) {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const trail = document.createElement('div');
+                    trail.style.position = 'fixed';
+                    trail.style.left = (x - 15) + 'px';
+                    trail.style.top = (y - 15) + 'px';
+                    trail.style.width = '30px';
+                    trail.style.height = '30px';
+                    trail.style.backgroundColor = '#ff3366';
+                    trail.style.borderRadius = '50%';
+                    trail.style.opacity = '0.7';
+                    trail.style.zIndex = '5';
+                    trail.style.pointerEvents = 'none';
+                    document.body.appendChild(trail);
+                    
+                    // Animate trail
+                    trail.animate([
+                        { transform: 'scale(1)', opacity: 0.7 },
+                        { transform: 'scale(0)', opacity: 0 }
+                    ], {
+                        duration: 500,
+                        easing: 'ease-out'
+                    });
+                    
+                    // Remove trail after animation
+                    setTimeout(() => {
+                        if (trail.parentNode) trail.remove();
+                    }, 500);
+                }, i * 50);
+            }
+        }
+        
+        // Initialize
+        window.addEventListener('load', function() {
+            // Make sure viewport is properly sized
+            setTimeout(() => {
+                createHearts(15);
+            }, 1000);
+        });
+        
+        // Handle window resize to keep buttons in bounds
+        window.addEventListener('resize', function() {
+            // If "No" button is fixed positioned, keep it within bounds
+            if (noBtn.style.position === 'fixed') {
+                const btnRect = noBtn.getBoundingClientRect();
+                const vw = window.innerWidth;
+                const vh = window.innerHeight;
+                
+                if (btnRect.right > vw || btnRect.bottom > vh || btnRect.left < 0 || btnRect.top < 0) {
+                    moveNoButtonRandomly();
+                }
+            }
+        });
+    </script>
+</body>
+</html>
